@@ -131,16 +131,16 @@ function renderPreview({
 function renderVideoPreview({ urlPath, absPath, relPath, matchedAlias, matchedFolder, names, idx, videoLength }) {
   // 侧边栏 HTML
   const sidebarHtml = `
-    <aside id=\"sidebar\" class=\"sidebar\">
-      <div class=\"sidebar-title\">同级文件</div>
-      <ul class=\"sidebar-list\">
+    <aside id="sidebar" class="sidebar">
+      <div class="sidebar-title">同级文件</div>
+      <ul class="sidebar-list">
         ${names
           .map((n, i) =>
             i === idx
-              ? `<li class=\\"active\\"><a class=\\"item\\" tabindex=\\"-1\\">${n}</a></li>`
-              : `<li><a class=\\"item\\" href=\\"/preview/${matchedAlias}${
+              ? `<li class="active"><a class="item" tabindex="-1">${n}</a></li>`
+              : `<li><a class="item" href="/preview/${matchedAlias}${
                   relPath ? '/' + require('path').dirname(relPath) : ''
-                }/${encodeURIComponent(n)}\\">${n}</a></li>`
+                }/${encodeURIComponent(n)}">${n}</a></li>`
           )
           .join('')}
       </ul>
