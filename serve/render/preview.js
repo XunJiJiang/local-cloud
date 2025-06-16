@@ -78,6 +78,7 @@ function renderPreview({
     return renderVideoPreview({ urlPath, absPath, relPath, matchedAlias, matchedFolder, names, idx, videoLength });
   } else if (audioTypes.includes(ext)) {
     // 音频渲染，UI与图片/视频一致，流式播放
+    // TODO: 防抖
     html += `<div id="audio-box">
       <audio id="audio" style="max-width:100%;max-height:70vh;display:block;margin:0 auto;box-shadow:0 2px 8px #0001;" controls src="${urlPath.replace(
         '/preview',
