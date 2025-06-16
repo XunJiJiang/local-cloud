@@ -87,7 +87,7 @@ http
     const allowedFolders = Object.values(aliasToPath);
     const aliasList = Object.keys(aliasToPath);
     let urlPath = decodeURIComponent(req.url.split('?')[0]);
-    console.log('Require in:', urlPath);
+    console.log('Require in:', urlPath, '=======================================================');
     if (urlPath === '/') {
       // 展示所有可访问的根目录，调用 renderDirectory 并传递 rootFoldersStatus
       const rootFoldersStatus = {};
@@ -154,6 +154,7 @@ http
           const ext = path.extname(absPath).toLowerCase();
           const imgTypes = ['.png', '.jpg', '.jpeg', '.gif', '.bmp', '.webp'];
           const videoTypes = ['.mp4', '.webm', '.ogg', '.mov'];
+          const audioTypes = ['.mp3', '.wav', '.ogg', '.aac', '.flac', '.m4a', '.opus'];
           const textTypes = [
             '.txt',
             '.md',
@@ -182,6 +183,7 @@ http
               imgTypes,
               videoTypes,
               textTypes,
+              audioTypes,
             })
           );
         });
@@ -254,6 +256,63 @@ http
       });
       return;
     }
+    // 音频流式接口 /audio/别名/子路径?start=秒
+    if (urlPath.startsWith('/audio/')) {
+      const audioPath = urlPath.replace(/^\/audio\//, '');
+      const aliasToPath = getAllowedFolders();
+      const aliasList = Object.keys(aliasToPath);
+      let matchedAlias = null;
+      let relPath = '';
+      for (const alias of aliasList) {
+        if (audioPath === alias || audioPath.startsWith(alias + '/')) {
+          matchedAlias = alias;
+          relPath = audioPath.slice(alias.length);
+          if (relPath.startsWith('/')) relPath = relPath.slice(1);
+          break;
+        }
+      }
+      if (!matchedAlias) {
+        res.writeHead(403);
+        res.end('Forbidden');
+        return;
+      }
+      const matchedFolder = aliasToPath[matchedAlias];
+      const absPath = relPath ? path.join(matchedFolder, relPath) : matchedFolder;
+      if (!isPathAllowed(absPath, Object.values(aliasToPath), exclude)) {
+        res.writeHead(403);
+        res.end('Forbidden');
+        return;
+      }
+      fs.stat(absPath, (err, stat) => {
+        if (err || !stat.isFile()) {
+          res.writeHead(404);
+          res.end('Not Found');
+          return;
+        }
+        const range = req.headers.range;
+        let start = 0;
+        let end = stat.size - 1;
+        if (range) {
+          const match = range.match(/bytes=(\d+)-(\d*)/);
+          if (match) {
+            start = parseInt(match[1], 10);
+            if (match[2]) end = parseInt(match[2], 10);
+          }
+        }
+        if (start > end) start = 0;
+        const chunkSize = end - start + 1;
+        const contentType = getAudioMime(absPath);
+        res.writeHead(206, {
+          'Content-Range': `bytes ${start}-${end}/${stat.size}`,
+          'Accept-Ranges': 'bytes',
+          'Content-Length': chunkSize,
+          'Content-Type': contentType,
+        });
+        const stream = fs.createReadStream(absPath, { start, end });
+        stream.pipe(res);
+      });
+      return;
+    }
     // 匹配到哪个共享目录
     let relPath = '';
     const cleanUrl = urlPath.replace(/^\/+/, ''); // 去掉前导斜杠
@@ -298,5 +357,17 @@ function getVideoMime(filePath) {
   if (ext === '.webm') return 'video/webm';
   if (ext === '.ogg') return 'video/ogg';
   if (ext === '.mov') return 'video/quicktime';
+  return 'application/octet-stream';
+}
+
+function getAudioMime(filePath) {
+  const ext = path.extname(filePath).toLowerCase();
+  if (ext === '.mp3') return 'audio/mpeg';
+  if (ext === '.wav') return 'audio/wav';
+  if (ext === '.ogg') return 'audio/ogg';
+  if (ext === '.aac') return 'audio/aac';
+  if (ext === '.flac') return 'audio/flac';
+  if (ext === '.m4a') return 'audio/mp4';
+  if (ext === '.opus') return 'audio/ogg';
   return 'application/octet-stream';
 }
