@@ -15,6 +15,7 @@ function renderPreview({
   textTypes,
   videoLength, // 新增参数
 }) {
+  console.log('Rendering preview:', relPath, 'as', urlPath);
   // 侧边栏 HTML
   const sidebarHtml = `
     <aside id="sidebar" class="sidebar">
@@ -129,6 +130,7 @@ function renderPreview({
 }
 
 function renderVideoPreview({ urlPath, absPath, relPath, matchedAlias, matchedFolder, names, idx, videoLength }) {
+  console.log('Rendering preview:', relPath, 'as', urlPath);
   // 侧边栏 HTML
   const sidebarHtml = `
     <aside id="sidebar" class="sidebar">

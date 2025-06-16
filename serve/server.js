@@ -6,38 +6,9 @@ const path = require('path');
 const { renderDirectory, getVideoDuration } = require('./render/directory');
 const { renderPreview, renderVideoPreview } = require('./render/preview');
 const { execSync } = require('child_process');
+const { getAllowedFolders, getExcludeFolders } = require('./src/utils/readConfig.js');
 
 const PORT = 8080;
-const JSON_DIR = path.join(__dirname, 'json');
-const FOLDERS_JSON = path.join(JSON_DIR, 'folders.json');
-
-function getAllowedFolders() {
-  try {
-    const data = fs.readFileSync(FOLDERS_JSON, 'utf-8');
-    const json = JSON.parse(data);
-    if (json && json.path && typeof json.path === 'object') {
-      // 返回 { 别名: 路径 } 的对象
-      return json.path;
-    }
-    return {};
-  } catch (e) {
-    return {};
-  }
-}
-
-function getExcludeFolders() {
-  try {
-    const data = fs.readFileSync(FOLDERS_JSON, 'utf-8');
-    const json = JSON.parse(data);
-    if (json && json.path && typeof json.path === 'object') {
-      // 返回 { 别名: 路径 } 的对象
-      return json.exclude;
-    }
-    return [];
-  } catch (e) {
-    return [];
-  }
-}
 
 /**
  *
@@ -116,6 +87,7 @@ http
     const allowedFolders = Object.values(aliasToPath);
     const aliasList = Object.keys(aliasToPath);
     let urlPath = decodeURIComponent(req.url.split('?')[0]);
+    console.log('Require in:', urlPath);
     if (urlPath === '/') {
       // 展示所有可访问的根目录，调用 renderDirectory 并传递 rootFoldersStatus
       const rootFoldersStatus = {};
@@ -283,24 +255,25 @@ http
       return;
     }
     // 匹配到哪个共享目录
-    let matchedFolder = null;
     let relPath = '';
     const cleanUrl = urlPath.replace(/^\/+/, ''); // 去掉前导斜杠
-    for (const folder of allowedFolders) {
-      const base = path.basename(folder);
-      if (cleanUrl === base || cleanUrl.startsWith(base + '/')) {
-        matchedFolder = folder;
-        relPath = cleanUrl.slice(base.length);
-        if (relPath.startsWith('/')) relPath = relPath.slice(1);
-        break;
-      }
-    }
+    const parts = cleanUrl.split('/');
+    parts[0] = aliasToPath[parts[0]] ?? parts[0];
+    const matchedFolder = parts.join('/');
+
+    console.log('实际', matchedFolder);
+
     if (!matchedFolder) {
       res.writeHead(403);
       res.end('Forbidden');
       return;
     }
     const absPath = relPath ? path.join(matchedFolder, relPath) : matchedFolder;
+    if (!isPathAllowed(absPath, allowedFolders, exclude)) {
+      res.writeHead(403);
+      res.end('Forbidden');
+      return;
+    }
     fs.stat(absPath, (err, stat) => {
       if (err) {
         res.writeHead(404);

@@ -1,8 +1,7 @@
 {
   "path": {
     "御所": "/Users/xunji/Documents/Entertainment/御所",
-    "御所1": "/Users/xunji/Documents/Entertainment/御所1",
-    "御所2": "/Users/xunji/Documents/Entertainment/御所2"
+    "T7": "/Volumes/T7/downloads"
   },
   "exclude": [
     "node_modules",
