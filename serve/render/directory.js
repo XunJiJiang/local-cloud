@@ -3,7 +3,7 @@ const fs = require('fs');
 const child_process = require('child_process');
 
 function renderDirectory({ dirPath, urlPath, rootAlias, files, exclude = [], rootFoldersStatus }) {
-  // 日志打印
+  // TODO: 修改输出颜色
   console.log('Rendering directory:', dirPath, 'as', urlPath);
   let html = `<!DOCTYPE html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>文件树</title><style>
     body { margin: 24px; }

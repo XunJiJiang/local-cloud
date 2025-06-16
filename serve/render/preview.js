@@ -240,4 +240,5 @@ function formatTime(t) {
   t = Math.floor(t);
   return Math.floor(t / 60) + ':'.padEnd(2, '0') + (t % 60).toString().padStart(2, '0');
 }
+
 module.exports = { renderPreview, renderVideoPreview };
