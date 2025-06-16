@@ -231,6 +231,20 @@ function renderVideoPreview({ urlPath, absPath, relPath, matchedAlias, matchedFo
     };
     sidebarMask.onclick=closeSidebar;
     window.addEventListener('resize',()=>{closeSidebar();});
+    // 视频切换防抖
+    let debounceTimer = null;
+    sidebar.querySelectorAll('li:not(.active) > a.item').forEach(a => {
+      a.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        const href = a.getAttribute('href');
+        if (!href) return;
+        if (debounceTimer) clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => {
+          location.href = href;
+        }, 250); // 250ms 防抖
+      });
+    });
   </script>`;
   html += '</body></html>';
   return html;
