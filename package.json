@@ -9,5 +9,22 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node ./serve/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com:XunJiJiang/local-cloud.git"
+  },
+  "keywords": [
+    "local",
+    "cloud",
+    "nodejs",
+    "file-server"
+  ],
+  "bugs": {
+    "url": "https://github.com/XunJiJiang/local-cloud/issues"
+  },
+  "homepage": "https://github.com/XunJiJiang/local-cloud#readme",
+  "dependencies": {
+    "dotenv": "^16.5.0"
   }
 }
