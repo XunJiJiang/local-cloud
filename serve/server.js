@@ -1,5 +1,6 @@
 // 一个简单的 Node.js 静态文件服务器，只允许访问 json/folders.json 中列出的文件夹
 // 不使用外部库
+require('dotenv').config();
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
@@ -8,7 +9,16 @@ const { renderPreview, renderVideoPreview } = require('./render/preview');
 const { execSync } = require('child_process');
 const { getAllowedFolders, getExcludeFolders } = require('./src/utils/readConfig.js');
 
-const PORT = 8080;
+const BASE_PORT = process.env.PORT ?? 8010;
+
+let PORT = BASE_PORT;
+// 获取本机 en0 的 IP 地址作为 host
+let HOST = '127.0.0.1';
+try {
+  HOST = execSync('ipconfig getifaddr en0').toString().trim() || HOST;
+} catch (e) {
+  // 如果获取失败，使用默认
+}
 
 /**
  *
@@ -72,16 +82,8 @@ function serveFile(res, filePath, fileName) {
   });
 }
 
-// 获取本机 en0 的 IP 地址作为 host
-let HOST = '127.0.0.1';
-try {
-  HOST = execSync('ipconfig getifaddr en0').toString().trim() || HOST;
-} catch (e) {
-  // 如果获取失败，使用默认
-}
-
-http
-  .createServer((req, res) => {
+function createServer() {
+  const serve = http.createServer((req, res) => {
     const aliasToPath = getAllowedFolders();
     const exclude = getExcludeFolders();
     const allowedFolders = Object.values(aliasToPath);
@@ -320,8 +322,6 @@ http
     parts[0] = aliasToPath[parts[0]] ?? parts[0];
     const matchedFolder = parts.join('/');
 
-    console.log('实际', matchedFolder);
-
     if (!matchedFolder) {
       res.writeHead(403);
       res.end('Forbidden');
@@ -345,11 +345,27 @@ http
         serveFile(res, absPath, path.basename(absPath));
       }
     });
-  })
-  .listen(PORT, HOST, () => {
-    // TODO: 修改输出颜色
-    console.log(`Server running at http://${HOST}:${PORT}/`);
   });
+  function listen() {
+    serve.listen(PORT, HOST, () => {
+      // TODO: 修改输出颜色
+      console.log(`Server running at http://${HOST}:${PORT}/`);
+    });
+  }
+  serve.on('error', err => {
+    if (err.code === 'EADDRINUSE') {
+      PORT++;
+      if (PORT > BASE_PORT + 100 || PORT > 65535) {
+        console.error('No available ports found. Please close some applications or change the port range.');
+        return;
+      }
+      listen(); // 递归尝试下一个端口
+    } else {
+      console.error('Server error:', err);
+    }
+  });
+  listen();
+}
 
 function getVideoMime(filePath) {
   const ext = path.extname(filePath).toLowerCase();
@@ -371,3 +387,5 @@ function getAudioMime(filePath) {
   if (ext === '.opus') return 'audio/ogg';
   return 'application/octet-stream';
 }
+
+createServer();

@@ -1,13 +1,30 @@
 {
   "name": "local-cloud",
   "version": "1.0.0",
-  "description": "",
-  "license": "ISC",
-  "author": "",
+  "description": "指定本地文件挂载到局域网服务器，所有局域网内设备访问",
+  "license": "MIT",
+  "author": "XunJi & XunJiJiang",
   "type": "commonjs",
-  "main": "server.js",
+  "main": "./serve/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node ./serve/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com:XunJiJiang/local-cloud.git"
+  },
+  "keywords": [
+    "local",
+    "cloud",
+    "nodejs",
+    "file-server"
+  ],
+  "bugs": {
+    "url": "https://github.com/XunJiJiang/local-cloud/issues"
+  },
+  "homepage": "https://github.com/XunJiJiang/local-cloud/tree/v1-backend-rendering#readme",
+  "dependencies": {
+    "dotenv": "^16.5.0"
   }
 }
