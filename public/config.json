@@ -1,8 +1,8 @@
 {
   "path": {
-    "文档": "/Users/xunji/Documents",
-    "图片": "/Users/xunji/Pictures",
-    "视频": "/Users/xunji/Videos",
+    "文档": "Documents",
+    "图片": "Pictures",
+    "视频": "Videos",
     "1": "1",
     "2": "1",
     "3": "1",
