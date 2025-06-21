@@ -25,10 +25,10 @@ function renderPreview({
         ${names
           .map((n, i) =>
             i === idx
-              ? `<li class=\"active\"><a class=\"item\" tabindex=\"-1\">${n}</a></li>`
-              : `<li><a class=\"item\" href=\"/preview/${matchedAlias}${
+              ? `<li class="active"><a class="item" tabindex="-1">${n}</a></li>`
+              : `<li><a class="item" href="/preview/${matchedAlias}${
                   relPath ? '/' + path.dirname(relPath) : ''
-                }/${encodeURIComponent(n)}\">${n}</a></li>`
+                }/${encodeURIComponent(n)}">${n}</a></li>`
           )
           .join('')}
       </ul>
@@ -87,7 +87,7 @@ function renderPreview({
     </div>`;
   } else if (textTypes.includes(ext)) {
     const fileData = fs.readFileSync(absPath, 'utf-8');
-    html += `<pre>${fileData.replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]))}</pre>`;
+    html += `<pre>${fileData.replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' })[c])}</pre>`;
   } else {
     html += `<span>${path.basename(absPath)}（不支持预览）</span><a href="${urlPath.replace(
       '/preview',
@@ -141,7 +141,7 @@ function renderPreview({
   return html;
 }
 
-function renderVideoPreview({ urlPath, absPath, relPath, matchedAlias, matchedFolder, names, idx, videoLength }) {
+function renderVideoPreview({ urlPath, absPath, relPath, matchedAlias, names, idx }) {
   console.log('Rendering preview:', relPath, 'as', urlPath);
   // 侧边栏 HTML
   const sidebarHtml = `
@@ -211,8 +211,8 @@ function renderVideoPreview({ urlPath, absPath, relPath, matchedAlias, matchedFo
     const list=${JSON.stringify(
       names
     )};let idx=${idx};function nav(i){if(i>=0&&i<list.length){location.href='/preview/${matchedAlias}'+parentPath+'/'+encodeURIComponent(list[i]);}}const parentPath='${
-    relPath ? '/' + require('path').dirname(relPath) : ''
-  }';document.getElementById('prev').onclick=function(){if(idx>0)nav(idx-1);};document.getElementById('next').onclick=function(){if(idx<list.length-1)nav(idx+1);};
+      relPath ? '/' + require('path').dirname(relPath) : ''
+    }';document.getElementById('prev').onclick=function(){if(idx>0)nav(idx-1);};document.getElementById('next').onclick=function(){if(idx<list.length-1)nav(idx+1);};
     // 侧栏控制
     const sidebar = document.getElementById('sidebar');
     const sidebarToggle = document.getElementById('sidebar-toggle');
@@ -264,11 +264,6 @@ function renderVideoPreview({ urlPath, absPath, relPath, matchedAlias, matchedFo
   </script>`;
   html += '</body></html>';
   return html;
-}
-
-function formatTime(t) {
-  t = Math.floor(t);
-  return Math.floor(t / 60) + ':'.padEnd(2, '0') + (t % 60).toString().padStart(2, '0');
 }
 
 module.exports = { renderPreview, renderVideoPreview };

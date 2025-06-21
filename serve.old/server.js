@@ -4,7 +4,7 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 const { renderDirectory, getVideoDuration } = require('./render/directory');
-const { renderPreview, renderVideoPreview } = require('./render/preview');
+const { renderPreview } = require('./render/preview');
 const { execSync } = require('child_process');
 const { getAllowedFolders, getExcludeFolders } = require('./src/utils/readConfig.js');
 
@@ -76,7 +76,7 @@ function serveFile(res, filePath, fileName) {
 let HOST = '127.0.0.1';
 try {
   HOST = execSync('ipconfig getifaddr en0').toString().trim() || HOST;
-} catch (e) {
+} catch {
   // 如果获取失败，使用默认
 }
 

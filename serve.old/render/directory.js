@@ -1,5 +1,4 @@
 const path = require('path');
-const fs = require('fs');
 const child_process = require('child_process');
 
 function renderDirectory({ dirPath, urlPath, rootAlias, files, exclude = [], rootFoldersStatus }) {

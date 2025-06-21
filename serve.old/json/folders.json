@@ -1,8 +1,5 @@
 {
-  "path": {
-    "御所": "/Users/xunji/Documents/Entertainment/御所",
-    "T7": "/Volumes/T7/downloads"
-  },
+  "path": {},
   "exclude": [
     "node_modules",
     ".DS_Store",
