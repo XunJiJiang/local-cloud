@@ -17,9 +17,6 @@ const { data, error } = await useFetch('/api/files-info', {
 })
 
 const type = data.value?.type
-const totalChunks = data.value?.totalChunks ?? 1
-const size = data.value?.size ?? 0
-const duration = data.value?.duration ?? 0
 
 const isUnknownFileType = data.value?.type === '[unknown type]'
 
@@ -46,9 +43,6 @@ if (error.value) {
       v-if="!isUnknownFileType && type"
       :root="props.root"
       :path="props.path"
-      :total-chunks="totalChunks"
-      :size="size"
-      :duration="duration"
     />
     <div v-else-if="isUnknownFileType">暂不支持该类型预览</div>
   </div>

@@ -10,6 +10,10 @@ const isSafari =
 
 function createOverlay() {
   if (!overlay) {
+    lastPosition.x = null
+    lastPosition.y = null
+    lastChangePosition.x = null
+    lastChangePosition.y = null
     overlay = document.createElement('div')
     overlay.id = 'liquid-glass-overlay'
     overlay.style.cssText = `
@@ -142,6 +146,7 @@ function moveOverlayTo(el: HTMLElement, { margin, borderRadius }: OverlayOptions
 
     // 回弹
     moveTimeoutId = window.setTimeout(() => {
+      if (!overlay) return
       overlay!.style.transition = 'all 0.45s cubic-bezier(0.37,0.01,0.1,1.8)'
       overlay!.style.transform = 'translate(0, 0) scale(1, 1)'
       lastPosition.x = targetX

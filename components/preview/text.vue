@@ -8,8 +8,8 @@ const text = ref('')
 const { data, error } = await useFetch('/api/preview-text', {
   method: 'get',
   params: {
-    root: encodeURIComponent(props.root),
-    path: encodeURIComponent(props.path.join('/'))
+    root: props.root,
+    path: props.path.join('/')
   }
 })
 
@@ -17,7 +17,8 @@ if (error.value) {
   console.error('Error fetching text content:', error.value)
   nextTick(() => navigateTo('/'))
 } else {
-  text.value = data.value.text || ''
+  console.log('Text content fetched successfully:', data.value?.extension)
+  text.value = data.value?.text || ''
 }
 </script>
 <template>

@@ -2,15 +2,14 @@
 const props = defineProps<{
   root: string
   path: string[]
-  totalChunks: number
-  size: number
-  duration?: number
 }>()
 
-const audioRef = useTemplateRef('audio-ref')
-
-console.log('Audio preview component initialized', props)
+const audioUrl = computed(() => {
+  const root = encodeURIComponent(props.root)
+  const path = encodeURIComponent(props.path.join('/'))
+  return `/api/preview-audio?root=${root}&path=${path}`
+})
 </script>
 <template>
-  <audio ref="audio-ref" controls style="width: 100%"></audio>
+  <audio :src="audioUrl" controls style="width: 100%"></audio>
 </template>

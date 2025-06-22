@@ -2,12 +2,10 @@
 const props = defineProps<{
   root: string
   path: string[]
-  totalChunks: number
-  size: number
 }>()
 const src = computed(
   () =>
-    `/api/preview-video?root=${encodeURIComponent(props.root)}&path=${encodeURIComponent(props.path.join('/'))}&index=0`
+    `/api/preview-video?root=${encodeURIComponent(props.root)}&path=${encodeURIComponent(props.path.join('/'))}`
 )
 </script>
 <template>

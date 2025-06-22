@@ -1,8 +1,6 @@
 {
   "path": {
-    "御所": "/Users/xunji/Documents/Entertainment/御所",
-    "ASMR-ONE": "/Users/xunji/Documents/Entertainment/ASMR-ONE",
-    "JMComic": "/Users/xunji/Documents/Entertainment/JMComic"
+
   },
   "exclude": [
     "node_modules",

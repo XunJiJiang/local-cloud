@@ -6,9 +6,10 @@ import tryCatch from '~/utils/tryCatch'
 export default defineEventHandler<
   Promise<{
     text: string
+    extension: string
   }>
 >(async (event) => {
-  const { root, path } = getQuery<{
+  let { root, path } = getQuery<{
     root: string
     path: string
   }>(event)
@@ -19,6 +20,10 @@ export default defineEventHandler<
       statusMessage: 'Missing required parameters'
     })
   }
+
+  // 修正：支持中文和多级路径
+  root = decodeURIComponent(root)
+  path = decodeURIComponent(path)
 
   const { fullPath } = await checkIgnore(root, path.split('/'))
 
@@ -44,9 +49,8 @@ export default defineEventHandler<
     })
   }
 
-  setHeader(event, 'Content-Type', `text/${fileExtension}`)
-
   return {
-    text
+    text,
+    extension: fileExtension
   }
 })

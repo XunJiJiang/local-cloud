@@ -11,14 +11,14 @@ defineProps<{ items: { label: string; to: string }[] }>()
         margin: 3,
         borderRadius: 100
       }"
-      class="whitespace-nowrap overflow-hidden text-ellipsis"
+      class="whitespace-nowrap overflow-hidden text-ellipsis w-[100%] padding-0"
       :title="item.label"
     >
       <NuxtLink
         :to="item.to"
-        class="block px-3 py-2 text-gray-800 font-medium cursor-pointer select-none text-[13px] bg-transparent"
+        class="whitespace-nowrap overflow-hidden text-ellipsis block px-3 py-2 text-gray-800 font-medium cursor-pointer select-none text-[13px] bg-transparent"
       >
-        <span class="inline-block align-middle">{{ item.label }}</span>
+        <span class="align-middle">{{ item.label }}</span>
       </NuxtLink>
     </li>
   </ul>
