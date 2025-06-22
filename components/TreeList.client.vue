@@ -11,6 +11,8 @@ defineProps<{ items: { label: string; to: string }[] }>()
         margin: 3,
         borderRadius: 100
       }"
+      class="whitespace-nowrap overflow-hidden text-ellipsis"
+      :title="item.label"
     >
       <NuxtLink
         :to="item.to"

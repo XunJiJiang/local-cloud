@@ -48,6 +48,10 @@ const lastChangePosition: {
 }
 
 function moveOverlayTo(el: HTMLElement, { margin, borderRadius }: OverlayOptions) {
+  if (!overlay) {
+    createOverlay()
+  }
+
   if (moveTimeoutId) clearTimeout(moveTimeoutId)
   if (hideTimeoutId) clearTimeout(hideTimeoutId)
 
@@ -159,11 +163,11 @@ function moveOverlayTo(el: HTMLElement, { margin, borderRadius }: OverlayOptions
 let hideTimeoutId: number | null = null
 
 function hideOverlay() {
-  if (overlay) {
-    hideTimeoutId = window.setTimeout(() => {
-      overlay!.style.opacity = '0'
-    }, 700)
-  }
+  hideTimeoutId = window.setTimeout(() => {
+    if (overlay) {
+      overlay.style.opacity = '0'
+    }
+  }, 700)
 }
 
 const elMap = new WeakMap<HTMLElement, () => void>()

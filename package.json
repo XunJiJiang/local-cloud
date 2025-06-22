@@ -38,15 +38,22 @@
     "@nuxtjs/tailwindcss": "^7.0.0-beta.0",
     "@pinia/nuxt": "^0.11.1",
     "@unhead/vue": "^2.0.10",
+    "adm-zip": "^0.5.16",
     "better-sqlite3": "^11.10.0",
     "eslint": "^9.29.0",
+    "ignore": "^7.0.5",
+    "node-unrar-js": "^2.0.2",
     "nuxt": "^3.17.5",
     "pinia": "^3.0.3",
+    "tar-stream": "^3.1.7",
     "typescript": "^5.8.3",
     "vue": "^3.5.16",
     "vue-router": "^4.5.1"
   },
   "devDependencies": {
+    "@types/adm-zip": "^0.5.7",
+    "@types/tar-stream": "^3.1.4",
+    "@types/yazl": "^3.3.0",
     "eslint-config-prettier": "^10.1.5",
     "prettier": "^3.5.3"
   }

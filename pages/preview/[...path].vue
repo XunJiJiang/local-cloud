@@ -4,13 +4,9 @@ useHead({
   title: '文件预览'
 })
 const route = useRoute()
-console.log('当前路由参数:', route)
+const paramPath = Array.isArray(route.params.path) ? route.params.path : [route.params.path]
 </script>
 
 <template>
-  <div>
-    <h1>文件预览</h1>
-    <!-- 这里可以引入预览组件或实现 -->
-    <div>这里是文件预览页面内容</div>
-  </div>
+  <ThePreview :root="paramPath[0] ?? ''" :path="paramPath.slice(1)" />
 </template>
