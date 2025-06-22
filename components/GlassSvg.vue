@@ -1,12 +1,14 @@
 <script lang="ts">
 import filter_640x36 from '~/assets/images/640x36-filter.png?url'
-import filter_200x160 from '~/assets/images/200x160-filter.png?url'
+import filter_320x36 from '~/assets/images/320x36-filter.png?url'
+import filter_160x36 from '~/assets/images/160x36-filter.png?url'
 import filter_128x128 from '~/assets/images/128x128-filter.png?url'
 
 const filtersKey = [
-  `liquid-glass-filter_${160 / 9}`,
-  `liquid-glass-filter_${5 / 4}`,
-  `liquid-glass-filter_${1}`
+  `liquid-glass-filter_640x36`,
+  `liquid-glass-filter_320x36`,
+  `liquid-glass-filter_160x36`,
+  `liquid-glass-filter_128x128`
 ]
 
 export const getFilterKey = (width: number, height: number) => {
@@ -14,7 +16,12 @@ export const getFilterKey = (width: number, height: number) => {
   let closestKey = ''
   let minDiff = Infinity
   for (const key of filtersKey) {
-    const keyRatio = parseFloat(key.split('_')[1])
+    const size = key.split('_')[1].split('x')
+
+    const keyWidth = parseInt(size[0], 10)
+    const keyHeight = parseInt(size[1], 10)
+    const keyRatio = keyWidth / keyHeight
+
     const diff = Math.abs(ratio - keyRatio)
     if (diff < minDiff) {
       minDiff = diff
@@ -29,9 +36,10 @@ export const getFilterKey = (width: number, height: number) => {
 const size = useLiquidGlass()
 
 const filters = {
-  [`liquid-glass-filter_${160 / 9}`]: [filter_640x36, '640', '36'],
-  [`liquid-glass-filter_${5 / 4}`]: [filter_200x160, '200', '160'],
-  [`liquid-glass-filter_${1}`]: [filter_128x128, '128', '128']
+  [`liquid-glass-filter_640x36`]: [filter_640x36, '640', '36'],
+  [`liquid-glass-filter_320x36`]: [filter_320x36, '320', '36'],
+  [`liquid-glass-filter_160x36`]: [filter_160x36, '160', '36'],
+  [`liquid-glass-filter_128x128`]: [filter_128x128, '128', '128']
 }
 </script>
 
