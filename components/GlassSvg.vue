@@ -1,13 +1,17 @@
 <script lang="ts">
-import filter_640x36 from '~/assets/images/640x36-filter.png?url'
-import filter_320x36 from '~/assets/images/320x36-filter.png?url'
-import filter_160x36 from '~/assets/images/160x36-filter.png?url'
+import filter_128x64 from '~/assets/images/128x64-filter.png?url'
+import filter_256x64 from '~/assets/images/256x64-filter.png?url'
+import filter_512x64 from '~/assets/images/512x64-filter.png?url'
+import filter_768x64 from '~/assets/images/768x64-filter.png?url'
+import filter_1024x64 from '~/assets/images/1024x64-filter.png?url'
 import filter_128x128 from '~/assets/images/128x128-filter.png?url'
 
 const filtersKey = [
-  `liquid-glass-filter_640x36`,
-  `liquid-glass-filter_320x36`,
-  `liquid-glass-filter_160x36`,
+  `liquid-glass-filter_128x64`,
+  `liquid-glass-filter_256x64`,
+  `liquid-glass-filter_512x64`,
+  `liquid-glass-filter_768x64`,
+  `liquid-glass-filter_1024x64`,
   `liquid-glass-filter_128x128`
 ]
 
@@ -36,9 +40,11 @@ export const getFilterKey = (width: number, height: number) => {
 const size = useLiquidGlass()
 
 const filters = {
-  [`liquid-glass-filter_640x36`]: [filter_640x36, '640', '36'],
-  [`liquid-glass-filter_320x36`]: [filter_320x36, '320', '36'],
-  [`liquid-glass-filter_160x36`]: [filter_160x36, '160', '36'],
+  [`liquid-glass-filter_128x64`]: [filter_128x64, '128', '64'],
+  [`liquid-glass-filter_256x64`]: [filter_256x64, '256', '64'],
+  [`liquid-glass-filter_512x64`]: [filter_512x64, '512', '64'],
+  [`liquid-glass-filter_768x64`]: [filter_768x64, '768', '64'],
+  [`liquid-glass-filter_1024x64`]: [filter_1024x64, '1024', '64'],
   [`liquid-glass-filter_128x128`]: [filter_128x128, '128', '128']
 }
 </script>

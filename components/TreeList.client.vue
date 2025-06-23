@@ -1,9 +1,13 @@
 <script setup lang="ts">
+import img from '~/assets/images/flower.jpg?url'
 defineProps<{ items: { label: string; to: string }[] }>()
 </script>
 
 <template>
-  <ul :class="`w-[80%] mx-auto bg-white shadow divide-gray-100 rounded-[18px]`">
+  <ul
+    :class="`w-[80%] mx-auto bg-white shadow divide-gray-100 rounded-[18px] flex`"
+    :style="`background-image: url(${img}); background-size: cover; background-position: center`"
+  >
     <li
       v-for="item in items"
       :key="item.to"

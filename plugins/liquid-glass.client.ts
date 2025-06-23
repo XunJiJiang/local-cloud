@@ -24,7 +24,7 @@ function createOverlay() {
       box-shadow: 0 0 0 0.3px rgba(255, 255, 255, 0.6), 0 16px 32px rgba(0, 0, 0, 0.12);
       border-radius: 12px;
       transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-      transform-origin: left center;
+      transform-origin: center center;
       opacity: 0;
       z-index: 999;`
     document.body.appendChild(overlay)
@@ -121,6 +121,11 @@ function moveOverlayTo(el: HTMLElement, { margin, borderRadius }: OverlayOptions
   // 计算回弹因子
   const bounceFactor = Math.max(((distance / windowDiagonal) * rectDiagonal) / 3, 4)
 
+  // 计算是横向移动为主或纵向移动为主
+  const isHorizontal =
+    Math.abs((lastPosition.x ?? targetX) - targetX) >
+    Math.abs((lastPosition.y ?? targetY) - targetY)
+
   // 计算是否超过上次位置
   if (
     lastPosition.x !== null &&
@@ -137,12 +142,23 @@ function moveOverlayTo(el: HTMLElement, { margin, borderRadius }: OverlayOptions
     overlay!.style.borderRadius = borderRadius + 'px'
 
     // 应用回弹的transform
-    const translateX = Math.min(bounceFactor, targetWidth / 2) / 2
-    const translateY = Math.min(bounceFactor, targetHeight / 2) * direction.y
-    const scaleX = 1 - Math.min(bounceFactor, targetWidth / 2) / targetWidth
-    const scaleY = 1 + Math.min(bounceFactor, targetHeight / 1.5) / (2 * targetHeight)
+    const [translateX, translateY, scaleX, scaleY] = (() => {
+      if (isHorizontal) {
+        const translateX = Math.min(bounceFactor, targetWidth / 2) * direction.x
+        // const translateY = Math.min(bounceFactor, targetHeight / 2) / 2
+        const scaleX = 1 + Math.min(bounceFactor, targetWidth / 1.5) / (2 * targetWidth)
+        const scaleY = 1 - Math.min(bounceFactor, targetHeight / 2) / targetHeight
+        return [translateX, 1, scaleX, scaleY]
+      } else {
+        // const translateX = Math.min(bounceFactor, targetWidth / 2) / 2
+        const translateY = Math.min(bounceFactor, targetHeight / 2) * direction.y
+        const scaleX = 1 - Math.min(bounceFactor, targetWidth / 2) / targetWidth
+        const scaleY = 1 + Math.min(bounceFactor, targetHeight / 1.5) / (2 * targetHeight)
+        return [1, translateY, scaleX, scaleY]
+      }
+    })()
 
-    overlay!.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scaleX}, ${scaleY})`
+    overlay!.style.transform = `scale(${scaleX}, ${scaleY}) translate(${translateX}px, ${translateY}px)`
 
     // 回弹
     moveTimeoutId = window.setTimeout(() => {
