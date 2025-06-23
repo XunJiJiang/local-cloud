@@ -13,6 +13,12 @@ const { data, error } = await useFetch('/api/list-folder-files', {
   }
 })
 
+const isPreview = useState('isPreview', () => true)
+
+onMounted(() => {
+  isPreview.value = false
+})
+
 const hasReadme = ref(false)
 
 const sortedItems = [

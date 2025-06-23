@@ -5,6 +5,12 @@ useHead({
 })
 const route = useRoute()
 const paramPath = Array.isArray(route.params.path) ? route.params.path : [route.params.path]
+
+const isPreview = useState('isPreview', () => true)
+
+onMounted(() => {
+  isPreview.value = true
+})
 </script>
 
 <template>
