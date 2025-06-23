@@ -43,7 +43,7 @@ if (error.value) {
 </script>
 
 <template>
-  <div>
+  <div class="justify-center max-w-[800px] mx-auto bg-blue px-0 py-10">
     <TreeList :items="sortedItems" />
     <PreviewText
       v-if="hasReadme"

@@ -16,7 +16,7 @@ const aliasList = computed(() => {
 </script>
 
 <template>
-  <div class="justify-center max-w-[800px] flex mx-auto bg-blue">
+  <div class="justify-center max-w-[800px] mx-auto bg-blue px-0 py-10">
     <TreeList :items="aliasList" />
   </div>
 </template>

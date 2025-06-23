@@ -27,7 +27,7 @@ if (error.value) {
 </script>
 
 <template>
-  <div>
+  <div class="max-h-[calc(100vh-4rem)] overflow-auto">
     <component
       :is="
         type === 'image'
