@@ -3,9 +3,9 @@ import { getFilterKey } from '~/components/GlassSvg.vue'
 let overlay: HTMLDivElement | null = null
 
 /** 是否是 safari 浏览器 */
-const isSafari =
+const enableLiquidGlass =
   typeof navigator !== 'undefined' &&
-  /safari/i.test(navigator.userAgent) &&
+  (/safari/i.test(navigator.userAgent) || /firefox/i.test(navigator.userAgent)) &&
   !/chrome/i.test(navigator.userAgent)
 
 function createOverlay() {
@@ -98,7 +98,7 @@ function moveOverlayTo(el: HTMLElement, { margin, borderRadius }: OverlayOptions
   size.value.height = targetHeight
 
   if (overlay) {
-    overlay.style.backdropFilter = `${isSafari ? '' : `url(#${filterKey})`} blur(${isSafari ? '10px' : '0.25px'}) contrast(1.2) brightness(1.01) saturate(1.1)`
+    overlay.style.backdropFilter = `${enableLiquidGlass ? '' : `url(#${filterKey})`} blur(${enableLiquidGlass ? '5px' : '0.25px'}) contrast(1.2) brightness(1.01) saturate(1.1)`
   }
   // 计算原位置和新位置的距离
   const distance = Math.sqrt(
@@ -212,7 +212,7 @@ export default defineNuxtPlugin((nuxtApp) => {
         const unbind = bind()
         elMap.set(el, unbind)
 
-        if (isSafari) {
+        if (enableLiquidGlass) {
           if (getComputedStyle(el).position === 'static') {
             el.style.position = 'relative'
           }
