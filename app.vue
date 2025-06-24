@@ -5,7 +5,7 @@ useHead({
 </script>
 
 <template>
-  <div>
+  <NuxtErrorBoundary @error="showError">
     <GlassSvg />
     <NuxtRouteAnnouncer />
     <NuxtLayout name="outer">
@@ -13,5 +13,14 @@ useHead({
         <NuxtPage />
       </NuxtLayout>
     </NuxtLayout>
-  </div>
+  </NuxtErrorBoundary>
 </template>
+
+<style>
+html,
+body,
+#__nuxt {
+  min-height: 100%;
+  height: 100%;
+}
+</style>
