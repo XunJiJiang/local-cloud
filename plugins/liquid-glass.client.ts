@@ -119,7 +119,7 @@ function moveOverlayTo(el: HTMLElement, { margin, borderRadius }: OverlayOptions
   const rectDiagonal = Math.sqrt(rect.width ** 2 + rect.height ** 2)
 
   // 计算回弹因子
-  const bounceFactor = Math.max(((distance / windowDiagonal) * rectDiagonal) / 3, 4)
+  const bounceFactor = Math.max(((distance / windowDiagonal) * rectDiagonal) / 10, 4)
 
   // 计算是横向移动为主或纵向移动为主
   const isHorizontal =
