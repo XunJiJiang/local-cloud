@@ -2,8 +2,7 @@
 const { data, error } = await useFetch('/api/config')
 
 if (error.value) {
-  console.error('Error fetching config:', error.value)
-  throw createError({ statusCode: 404, statusMessage: 'Page Not Found' })
+  throw createError(error.value)
 }
 
 const aliasList = computed(() => {
