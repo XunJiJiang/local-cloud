@@ -42,25 +42,25 @@ const prevLink = computed(() => {
       <client-only>
         <nav v-if="headerNav.headerNav.length > 0" class="ml-auto">
           <template v-for="item in headerNav.headerNav">
-        <NuxtLink
+            <NuxtLink
               v-if="item.type === 'link'"
               :key="item.key + 'link'"
               :to="item.to ?? ''"
               class="px-2 py-1 rounded text-gray-600 hover:text-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 transition-colors cursor-pointer"
-          style="background: none; border: none"
+              style="background: none; border: none"
               >{{ item.label }}</NuxtLink
             >
             <button
               v-else-if="item.type === 'button'"
               :key="item.key + 'button'"
               class="px-2 py-1 rounded text-gray-600 hover:text-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 transition-colors cursor-pointer"
-          style="background: none; border: none"
+              style="background: none; border: none"
               @click="headerNav.triggerHeaderNavEvent(item.key)"
-        >
+            >
               {{ item.label }}
             </button>
           </template>
-      </nav>
+        </nav>
       </client-only>
     </header>
     <main ref="main-ref" class="flex-1 min-h-0 overflow-auto">
@@ -69,7 +69,12 @@ const prevLink = computed(() => {
     <footer
       class="h-11 text-gray-400 flex items-center justify-center text-[11px] bg-transparent flex-shrink-0"
     >
-      © 2025 本地云
+      <span v-if="paramPath.length === 0">© 2025 本地云</span>
+      <TheBreadcrumb
+        v-else
+        :path="paramPath.slice(0, route.meta.layout === 'preview' ? -1 : void 0)"
+        root="tree"
+      />
     </footer>
   </div>
 </template>
