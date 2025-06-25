@@ -1,7 +1,7 @@
 <h1 align="center">local cloud</h1>
 
-> ![WARNING]
-> 目前仅 [v1 版本](https://github.com/XunJiJiang/local-cloud/tree/v1-backend-rendering) 可用, 其他版本正在开发中
+> [!WARNING]
+> 目前仅 [v1 版本](https://github.com/XunJiJiang/local-cloud/tree/v1-backend-rendering) 可用, v2 版本正在开发中
 
 ## 说明
 
