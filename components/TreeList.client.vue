@@ -1,10 +1,10 @@
 <script setup lang="ts">
-// import img from '~/assets/images/flower.jpg?url'
 defineProps<{ items: { label: string; to: string }[] }>()
 </script>
 
 <template>
-  <ul :class="`w-[80%] mx-auto  shadow divide-gray-100 rounded-[18px]`">
+  <ul :class="`w-[80%] mx-auto shadow divide-gray-100 rounded-[18px]`">
+    <span v-if="items.length === 0" class="text-gray-500 text-center block p-3"> 无数据 </span>
     <li
       v-for="item in items"
       :key="item.to"
