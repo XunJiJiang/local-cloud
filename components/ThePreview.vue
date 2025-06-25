@@ -21,8 +21,7 @@ const type = data.value?.type
 const isUnknownFileType = data.value?.type === '[unknown type]'
 
 if (error.value) {
-  nextTick(() => navigateTo('/'))
-  console.error('Error fetching file content:', error.value)
+  throw createError(error.value)
 }
 </script>
 

@@ -14,8 +14,7 @@ const { data, error } = await useFetch('/api/preview-text', {
 })
 
 if (error.value) {
-  console.error('Error fetching text content:', error.value)
-  nextTick(() => navigateTo('/'))
+  throw createError(error.value)
 } else {
   console.log('Text content fetched successfully:', data.value?.extension)
   text.value = data.value?.text || ''
