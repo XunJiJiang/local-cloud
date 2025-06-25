@@ -5,12 +5,20 @@ useHead({
   title: '文件树'
 })
 const route = useRoute()
-const paramPath = Array.isArray(route.params.path) ? route.params.path : [route.params.path]
+
+const paramPath = computed(() =>
+  Array.isArray(route.params.path)
+    ? [...route.params.path]
+    : route.params.path
+      ? [route.params.path]
+      : []
+)
+
 const { data, error } = await useFetch('/api/list-folder-files', {
   method: 'POST',
   body: {
-    root: paramPath[0] ?? '',
-    path: paramPath.slice(1)
+    root: paramPath.value[0] ?? '',
+    path: paramPath.value.slice(1)
   }
 })
 
@@ -22,12 +30,13 @@ onMounted(() => {
 
 const hasReadme = ref(false)
 
+// 由于每次切换路由时都会重新渲染组件，因此不需要使用 computed
 const sortedItems = [
   ...(data.value?.folders ?? [])
     .sort((a, b) => a.name.localeCompare(b.name))
     .map(({ name }) => ({
       label: name,
-      to: `/tree/${[...paramPath.map((item) => encodeURIComponent(item)), encodeURIComponent(name)].join('/')}`
+      to: `/tree/${[...paramPath.value.map((item) => encodeURIComponent(item)), encodeURIComponent(name)].join('/')}`
     })),
   ...(data.value?.files ?? [])
     .sort((a, b) => a.name.localeCompare(b.name))
@@ -38,7 +47,7 @@ const sortedItems = [
 
       return {
         label: name,
-        to: `/preview/${[...paramPath.map((item) => encodeURIComponent(item)), encodeURIComponent(name)].join('/')}`
+        to: `/preview/${[...paramPath.value.map((item) => encodeURIComponent(item)), encodeURIComponent(name)].join('/')}`
       }
     })
 ]
@@ -117,7 +126,19 @@ if (error.value) {
     <PreviewText
       v-if="hasReadme"
       :root="encodeURIComponent(paramPath[0])"
-      :path="[...paramPath.slice(1).map((item) => encodeURIComponent(item)), 'README.md']"
+      :path="[...paramPath.slice(1).map(encodeURIComponent), 'README.md']"
     />
+    <div v-if="isSingleFolderWithImages" class="my-6 overflow-x-auto max-w-full">
+      <div class="inline-flex flex-row-reverse overflow-x-auto">
+        <PreviewImage
+          v-for="item in childFiles"
+          ref="preview-image"
+          :key="item.name"
+          :root="encodeURIComponent(paramPath[0])"
+          :path="paramPath.slice(1).concat([data?.folders[0].name ?? '', item.name])"
+          @load="scrollToFirstImage"
+        />
+      </div>
+    </div>
   </div>
 </template>
