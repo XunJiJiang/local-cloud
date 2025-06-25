@@ -14,8 +14,12 @@ function goBack() {
   if (window && window.history.length > 1) {
     window.history.back()
   } else {
-    window.location.href = '/'
+    navigateTo('/')
   }
+}
+
+function goHome() {
+  navigateTo('/')
 }
 </script>
 
@@ -45,6 +49,12 @@ function goBack() {
         @click="goBack"
       >
         返回上一页
+      </button>
+      <button
+        class="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition ms-2"
+        @click="goHome"
+      >
+        返回首页
       </button>
     </div>
   </div>
