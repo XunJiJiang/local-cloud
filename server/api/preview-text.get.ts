@@ -45,7 +45,7 @@ export default defineEventHandler<
   if (error) {
     throw createError({
       statusCode: 500,
-      statusMessage: 'Failed to read image file'
+      statusMessage: 'api:preview-text.get' + (error.message ?? 'Failed to read image file')
     })
   }
 

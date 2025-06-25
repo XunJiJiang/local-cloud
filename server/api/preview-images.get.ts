@@ -38,7 +38,8 @@ export default defineEventHandler(async (event) => {
     if (error) {
       throw createError({
         statusCode: 500,
-        statusMessage: 'Failed to read compressed image file'
+        statusMessage:
+          'api:preview-image.get' + (error.message ?? 'Failed to read compressed image file')
       })
     }
 
@@ -53,7 +54,7 @@ export default defineEventHandler(async (event) => {
     if (error) {
       throw createError({
         statusCode: 500,
-        statusMessage: 'Failed to read image file'
+        statusMessage: 'api:preview-image.get' + (error.message ?? 'Failed to read image file')
       })
     }
 

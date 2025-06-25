@@ -30,7 +30,7 @@ export default defineEventHandler(async (event) => {
     if (error || !content) {
       throw createError({
         statusCode: 404,
-        statusMessage: error?.message || 'File not found in archive'
+        statusMessage: 'api:preview-audio.get' + (error?.message ?? 'File not found in archive')
       })
     }
     setHeader(event, 'Content-Type', `audio/${ext}`)
