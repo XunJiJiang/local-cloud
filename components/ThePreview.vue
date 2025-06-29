@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useGlobalState } from '~/stores/global-state'
 import previewImage from './preview/image.vue'
 import previewAudio from './preview/audio.vue'
 import previewVideo from './preview/video.vue'
@@ -7,6 +8,12 @@ const props = defineProps<{
   root: string
   path: string[]
 }>()
+
+const globalState = useGlobalState()
+
+onBeforeMount(() => {
+  globalState.setPreviewState(true, type === '[unknown type]' ? null : (type ?? null))
+})
 
 const { data, error } = await useFetch('/api/files-info', {
   method: 'post',
@@ -26,7 +33,7 @@ if (error.value) {
 </script>
 
 <template>
-  <div class="max-h-[calc(100vh-4rem)] overflow-auto">
+  <div class="h-full min-h-full overflow-auto">
     <component
       :is="
         type === 'image'

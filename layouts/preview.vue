@@ -1,5 +1,5 @@
 <template>
-  <div class="preview-layout">
+  <div class="preview-layout max-h-full flex-1">
     <NuxtPage />
   </div>
 </template>

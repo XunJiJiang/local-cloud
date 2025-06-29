@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { useHeaderNav } from '~/stores/header-nav'
+import { useGlobalState } from '~/stores/global-state'
+
 definePageMeta({ layout: 'tree' })
 useHead({
   title: '文件树'
@@ -13,6 +15,10 @@ const paramPath = computed(() =>
       ? [route.params.path]
       : []
 )
+
+const globalState = useGlobalState()
+
+globalState.resetPreviewState()
 
 const { data, error } = await useFetch('/api/list-folder-files', {
   method: 'POST',
@@ -55,7 +61,7 @@ const sortedItems = [
 const headerNav = useHeaderNav()
 
 onMounted(() => {
-    headerNav.setHeaderNav([])
+  headerNav.setHeaderNav([])
 })
 
 if (error.value) {

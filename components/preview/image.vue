@@ -20,10 +20,13 @@ defineExpose({
 const src = `/api/preview-images?root=${encodeURIComponent(props.root)}&path=${props.path.map(encodeURIComponent).join('/')}`
 </script>
 <template>
-  <div ref="container-ref" class="flex items-center justify-center overflow-hidden">
+  <div
+    ref="container-ref"
+    class="flex items-center justify-center overflow-hidden h-full w-full min-h-full"
+  >
     <img
       :src="src"
-      class="max-w-screen object-contain max-h-[calc(100vh-94px)] h-[calc(100vh-94px)]"
+      class="max-w-full object-contain max-h-full"
       @error="emits('error', $event)"
       @load="emits('load', $event)"
     />

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { useHeaderNav } from '~/stores/header-nav'
+import { useGlobalState } from '~/stores/global-state'
 const route = useRoute()
 
 const paramPath = computed(() =>
@@ -11,6 +12,10 @@ const paramPath = computed(() =>
 )
 
 const headerNav = useHeaderNav()
+
+const globalState = useGlobalState()
+
+const isImgPreview = computed(() => globalState.previewState.previewType === 'image')
 
 const mainRef = useTemplateRef('main-ref')
 
@@ -27,9 +32,9 @@ const prevLink = computed(() => {
 </script>
 
 <template>
-  <div class="min-h-full min-w-[300px] w-full h-full flex flex-col">
+  <div class="min-h-full min-w-[300px] w-full h-full relative">
     <header
-      class="h-12 bg-gray-100 text-gray-600 items-center px-8 text-[13px] font-bold shadow flex-shrink-0 flex whitespace-nowrap"
+      class="h-12 bg-gray-100 text-gray-600 items-center px-8 text-[13px] font-bold shadow flex whitespace-nowrap fixed top-0 left-0 w-full z-1001"
     >
       <h1>
         <NuxtLink
@@ -63,11 +68,14 @@ const prevLink = computed(() => {
         </nav>
       </client-only>
     </header>
-    <main ref="main-ref" class="flex-1 min-h-0 overflow-auto">
+    <main
+      ref="main-ref"
+      :class="['min-h-full', 'pb-11', 'pt-12', isImgPreview ? 'flex max-h-full' : '']"
+    >
       <slot />
     </main>
     <footer
-      class="h-11 text-gray-400 flex items-center justify-center text-[11px] bg-transparent flex-shrink-0"
+      class="h-11 text-gray-400 flex items-center justify-center text-[11px] flex-shrink-0 fixed bottom-0 left-0 bg-white w-full z-1001"
     >
       <span v-if="paramPath.length === 0">© 2025 本地云</span>
       <TheBreadcrumb
