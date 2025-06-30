@@ -1,6 +1,6 @@
 export type HeaderNavItem = {
   key: string
-  type: 'link' | 'button'
+  type: 'link' | 'button' | 'label'
   label: string
   icon?: string
   to?: string

@@ -51,19 +51,23 @@ const prevLink = computed(() => {
               v-if="item.type === 'link'"
               :key="item.key + 'link'"
               :to="item.to ?? ''"
-              class="px-2 py-1 rounded text-gray-600 hover:text-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 transition-colors cursor-pointer"
-              style="background: none; border: none"
+              class="bg-transparent border-none px-2 py-1 rounded text-gray-600 hover:text-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 transition-colors cursor-pointer"
               >{{ item.label }}</NuxtLink
             >
             <button
               v-else-if="item.type === 'button'"
               :key="item.key + 'button'"
-              class="px-2 py-1 rounded text-gray-600 hover:text-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 transition-colors cursor-pointer"
-              style="background: none; border: none"
+              class="bg-transparent border-none px-2 py-1 rounded text-gray-600 hover:text-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 transition-colors cursor-pointer"
               @click="headerNav.triggerHeaderNavEvent(item.key)"
             >
               {{ item.label }}
             </button>
+            <span
+              v-else-if="item.type === 'label'"
+              :key="item.key + 'label'"
+              class="bg-transparent border-none px-2 py-1 rounded text-gray-600"
+              >{{ item.label }}</span
+            >
           </template>
         </nav>
       </client-only>
