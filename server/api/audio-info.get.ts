@@ -1,4 +1,3 @@
-import { checkIgnore } from '../utils/ignore-check'
 import { supportedAudioTypes } from '../utils/extension'
 import { statSync } from 'fs'
 import * as mm from 'music-metadata'
@@ -12,7 +11,7 @@ export default defineEventHandler(async (event) => {
       statusMessage: 'Missing required parameters'
     })
   }
-  const { fullPath } = await checkIgnore(root, path.split('/'))
+  const { fullPath } = await apiCheck(root, path.split('/'))
   const fileExtension = fullPath.split('.').pop()?.toLowerCase() || ''
   if (!supportedAudioTypes.includes(fileExtension)) {
     throw createError({

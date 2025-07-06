@@ -1,6 +1,5 @@
 import { readdirSync, statSync } from 'fs'
 import { join } from 'path'
-import { checkIgnore } from '../utils/ignore-check'
 
 export default defineEventHandler(async (event) => {
   const body = await readBody<{
@@ -8,7 +7,7 @@ export default defineEventHandler(async (event) => {
     path: string[]
   }>(event)
 
-  const { fullPath, ig } = await checkIgnore(body.root, body.path)
+  const { fullPath, ig } = await apiCheck(body.root, body.path)
 
   if (inCompressedFile(fullPath) || isCompressedFile(fullPath)) {
     const { compressedFilePath, otherPath } = splitCompressedPath(fullPath)
@@ -17,10 +16,16 @@ export default defineEventHandler(async (event) => {
     return {
       files: entries
         .filter((entry) => entry.type === 'file')
-        .map((entry) => ({
-          name: entry.name,
-          type: 'file'
-        })),
+        .map((entry) => {
+          const fileType: 'image' | 'video' | 'audio' | 'text' | '[unknown]' = getFileType(
+            entry.name
+          )
+          return {
+            name: entry.name,
+            type: 'file',
+            fileType
+          }
+        }),
       folders: entries
         .filter((entry) => entry.type === 'directory')
         .map((entry) => ({
@@ -50,10 +55,14 @@ export default defineEventHandler(async (event) => {
   files = ig.filter(files)
 
   return {
-    files: files.map((file) => ({
-      name: file,
-      type: 'file'
-    })),
+    files: files.map((file) => {
+      const fileType: 'image' | 'video' | 'audio' | 'text' | '[unknown]' = getFileType(file)
+      return {
+        name: file,
+        type: 'file',
+        fileType
+      }
+    }),
     folders: folders.map((folder) => ({
       name: folder,
       type: 'directory'

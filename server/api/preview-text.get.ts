@@ -1,5 +1,3 @@
-import { checkIgnore } from '../utils/ignore-check'
-import { supportedTextTypes } from '../utils/extension'
 import { readFileSync } from 'fs'
 import tryCatch from '~/utils/tryCatch'
 
@@ -25,7 +23,7 @@ export default defineEventHandler<
   root = decodeURIComponent(root)
   path = decodeURIComponent(path)
 
-  const { fullPath } = await checkIgnore(root, path.split('/'))
+  const { fullPath } = await apiCheck(root, path.split('/'))
 
   const fileExtension = fullPath.split('.').pop()?.toLowerCase() || ''
 

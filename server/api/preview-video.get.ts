@@ -1,11 +1,4 @@
-import { checkIgnore } from '../utils/ignore-check'
-import { supportedVideoTypes } from '../utils/extension'
 import { statSync, createReadStream } from 'fs'
-import {
-  inCompressedFile,
-  splitCompressedPath,
-  readCompressedFile
-} from '../utils/parsing-compressed-files'
 
 export default defineEventHandler(async (event) => {
   const query = getQuery(event) as { root: string; path: string }
@@ -16,11 +9,11 @@ export default defineEventHandler(async (event) => {
       statusMessage: 'Missing required parameters'
     })
   }
-  const { fullPath } = await checkIgnore(root, path.split('/'))
+  const { fullPath } = await apiCheck(root, path.split('/'))
   // 检查是否在压缩包内
   if (inCompressedFile(path)) {
     const { compressedFilePath, otherPath } = splitCompressedPath(path)
-    const absCompressed = await checkIgnore(root, compressedFilePath.split('/'))
+    const absCompressed = await apiCheck(root, compressedFilePath.split('/'))
     const ext = otherPath[otherPath.length - 1]?.split('.').pop()?.toLowerCase() || ''
     if (!supportedVideoTypes.includes(ext)) {
       throw createError({ statusCode: 400, statusMessage: 'Unsupported video type' })

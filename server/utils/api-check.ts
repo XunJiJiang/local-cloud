@@ -1,14 +1,15 @@
 import { join } from 'path'
 import { readFileSync } from 'fs'
 import ignore from 'ignore'
+import JSON5 from 'json5'
+import type { Config } from '~/types/config'
+import tryCatch from '~/utils/tryCatch'
+
+const CONFIG_PATH = join(process.cwd(), 'public/config.json5')
 
 /** 检查当前路径是否合法, 并返回一些数据 */
-export const checkIgnore = async (root: string, path: string[]) => {
-  const configPath = join(process.cwd(), 'public/config.json')
-  const config = JSON.parse(readFileSync(configPath, 'utf-8')) as {
-    path?: Record<string, string>
-    exclude?: string[]
-  }
+export const apiCheck = async (root: string, path: string[]) => {
+  const config = JSON5.parse<Config>(readFileSync(CONFIG_PATH, 'utf-8'))
 
   if (!config.path || typeof config.path !== 'object') {
     throw createError({
@@ -17,19 +18,32 @@ export const checkIgnore = async (root: string, path: string[]) => {
     })
   }
 
-  let rootPath = ''
-  for (const key in config.path) {
-    if (key === root) {
-      rootPath = config.path[key]
-      break
+  const [rootPath, error] = tryCatch(() => {
+    if (root === '') {
+      return ''
     }
-  }
 
-  if (!rootPath) {
+    for (const key in config.path) {
+      if (key === root) {
+        return config.path[key].path
+      }
+    }
+
     throw createError({
       statusCode: 404,
       statusMessage: 'Root path not found in config'
     })
+  })
+
+  if (error) {
+    throw error
+  }
+
+  if (!rootPath) {
+    return {
+      fullPath: '',
+      ig: ignore()
+    }
   }
 
   const ignorePatterns: string[] = config.exclude ?? []

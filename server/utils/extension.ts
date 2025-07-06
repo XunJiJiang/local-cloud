@@ -37,3 +37,14 @@ export const supportedVideoTypes = ['mp4', 'webm', 'ogg', 'avi', 'mov', 'mkv', '
 //   ...supportedAudioTypes,
 //   ...supportedVideoTypes
 // ]
+
+export const getFileType = (
+  fileName: string
+): 'image' | 'video' | 'audio' | 'text' | '[unknown]' => {
+  const ext = fileName.split('.').pop()?.toLowerCase() ?? ''
+  if (supportedImageTypes.includes(ext)) return 'image'
+  if (supportedVideoTypes.includes(ext)) return 'video'
+  if (supportedAudioTypes.includes(ext)) return 'audio'
+  if (supportedTextTypes.includes(ext)) return 'text'
+  return '[unknown]'
+}

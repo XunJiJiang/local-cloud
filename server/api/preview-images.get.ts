@@ -1,8 +1,5 @@
-import { checkIgnore } from '../utils/ignore-check'
-import { supportedImageTypes } from '../utils/extension'
 import { readFileSync } from 'fs'
 import tryCatch from '~/utils/tryCatch'
-import { readCompressedFile, splitCompressedPath } from '../utils/parsing-compressed-files'
 
 /** 通过 img.src 调用 */
 export default defineEventHandler(async (event) => {
@@ -18,7 +15,7 @@ export default defineEventHandler(async (event) => {
     })
   }
 
-  const { fullPath } = await checkIgnore(root, path.split('/'))
+  const { fullPath } = await apiCheck(root, path.split('/'))
 
   const fileExtension = fullPath.split('.').pop()?.toLowerCase() || ''
 

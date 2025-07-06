@@ -1,11 +1,3 @@
-import {
-  supportedTextTypes,
-  supportedImageTypes,
-  supportedAudioTypes,
-  supportedVideoTypes
-} from '../utils/extension'
-import { checkIgnore } from '../utils/ignore-check'
-
 export default defineEventHandler<
   Promise<{
     type: 'text' | 'image' | 'audio' | 'video' | '[unknown type]'
@@ -16,7 +8,7 @@ export default defineEventHandler<
     path: string[]
   }>(event)
 
-  const { fullPath } = await checkIgnore(body.root, body.path)
+  const { fullPath } = await apiCheck(body.root, body.path)
 
   const fileExtension = fullPath.split('.').pop()?.toLowerCase() || ''
 
