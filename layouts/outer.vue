@@ -1,4 +1,5 @@
 <script setup lang="ts">
+useScrollHistory()
 const route = useRoute()
 const paramPath = useParamPath()
 
