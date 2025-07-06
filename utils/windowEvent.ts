@@ -16,6 +16,8 @@ export type Type =
   | 'keyup'
   | 'copy'
   | 'cut'
+  | 'wheel'
+  | 'scroll'
 
 export const windowEvent = <T extends Type>(
   type: T,
