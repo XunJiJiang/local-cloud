@@ -9,6 +9,8 @@ const PADDING_WIDTH = 20
 <script setup lang="ts">
 const { path, root = '' } = defineProps<{ path: string[]; root?: string }>()
 
+const encodeRoot = root.split('/').map(encodeURIComponent).join('/')
+
 const containerRef = useTemplateRef('container-ref')
 
 const visibleBreadcrumbs = computed(() => {
@@ -190,7 +192,7 @@ watch([() => path], calcVisible)
       <template v-if="seg.type === 'segment'">
         <NuxtLink
           :key="'seg-' + idx"
-          :to="'/' + encodeURIComponent(root) + '/' + seg.path"
+          :to="'/' + encodeRoot + '/' + seg.path"
           :style="{
             width: seg.width + 'px'
           }"
