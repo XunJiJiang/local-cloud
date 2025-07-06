@@ -1,9 +1,8 @@
 <script setup lang="ts">
-import { useGlobalState } from '~/stores/global-state'
-import previewImage from './preview/image.vue'
-import previewAudio from './preview/audio.vue'
-import previewVideo from './preview/video.vue'
-import previewText from './preview/text.vue'
+import PreviewImage from './preview/image.vue'
+import PreviewAudio from './preview/audio.vue'
+import PreviewVideo from './preview/video.vue'
+import PreviewText from './preview/text.vue'
 const props = defineProps<{
   root: string
   path: string[]
@@ -37,13 +36,13 @@ if (error.value) {
     <component
       :is="
         type === 'image'
-          ? previewImage
+          ? PreviewImage
           : type === 'audio'
-            ? previewAudio
+            ? PreviewAudio
             : type === 'video'
-              ? previewVideo
+              ? PreviewVideo
               : type === 'text'
-                ? previewText
+                ? PreviewText
                 : null
       "
       v-if="!isUnknownFileType && type"
