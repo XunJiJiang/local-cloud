@@ -1,0 +1,9 @@
+{
+  // 当文件预览页面只有图片时的翻页方向
+  pageTurnDirection4ImagesOnly: 'left2right',
+  // 页面设置
+  page: {
+    preview: 'default',
+    tree: 'default'
+  }
+}

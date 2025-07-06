@@ -1,15 +1,6 @@
 <script setup lang="ts">
-import { useHeaderNav } from '~/stores/header-nav'
-import { useGlobalState } from '~/stores/global-state'
 const route = useRoute()
-
-const paramPath = computed(() =>
-  Array.isArray(route.params.path)
-    ? [...route.params.path]
-    : route.params.path
-      ? [route.params.path]
-      : []
-)
+const paramPath = useParamPath()
 
 const headerNav = useHeaderNav()
 
@@ -25,9 +16,13 @@ watch(route, () => {
   }
 })
 
+const pageConfig = await usePageConfig()
+
 const prevLink = computed(() => {
   const prevPath = paramPath.value.slice(0, -1)
-  return prevPath.length > 0 ? `/tree/${prevPath.map(encodeURIComponent).join('/')}` : '/'
+  return prevPath.length > 0
+    ? `/${pageConfig.value.page.tree}/tree/${prevPath.map(encodeURIComponent).join('/')}`
+    : '/'
 })
 </script>
 
@@ -85,7 +80,7 @@ const prevLink = computed(() => {
       <TheBreadcrumb
         v-else
         :path="paramPath.slice(0, route.meta.layout === 'preview' ? -1 : void 0)"
-        root="tree"
+        root="default/tree"
       />
     </footer>
   </div>

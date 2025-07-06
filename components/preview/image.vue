@@ -1,12 +1,5 @@
 <script setup lang="ts">
-const route = useRoute()
-const paramPath = computed(() =>
-  Array.isArray(route.params.path)
-    ? [...route.params.path]
-    : route.params.path
-      ? [route.params.path]
-      : []
-)
+const paramPath = useParamPath()
 
 const props = defineProps<{
   root: string
@@ -27,6 +20,8 @@ defineExpose({
 })
 
 const src = `/api/preview-images?root=${encodeURIComponent(props.root)}&path=${props.path.map(encodeURIComponent).join('/')}`
+
+const pageConfig = await usePageConfig()
 
 const { data, error } = await useFetch('/api/list-folder-files', {
   method: 'POST',
@@ -52,13 +47,13 @@ const thisFileIdx =
 
 const [prevTo, nextTo] = [
   thisFileIdx > 0
-    ? `/preview/${paramPath.value
+    ? `/${pageConfig.value.page.preview}/preview/${paramPath.value
         .slice(0, -1)
         .map((item) => encodeURIComponent(item))
         .join('/')}/${encodeURIComponent(data.value?.files[thisFileIdx - 1].name ?? '')}`
     : null,
   thisFileIdx < (data.value?.files.length ?? 0) - 1
-    ? `/preview/${paramPath.value
+    ? `/${pageConfig.value.page.preview}/preview/${paramPath.value
         .slice(0, -1)
         .map((item) => encodeURIComponent(item))
         .join('/')}/${encodeURIComponent(data.value?.files[thisFileIdx + 1].name ?? '')}`

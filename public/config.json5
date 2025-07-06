@@ -1,0 +1,20 @@
+{
+  path: {
+    御所: {
+      path: '/Users/xunji/Documents/Entertainment/御所',
+      config: {}
+    },
+    'ASMR-ONE': {
+      path: '/Users/xunji/Documents/Entertainment/ASMR-ONE',
+      config: {}
+    },
+    JMComic: {
+      path: '/Users/xunji/Documents/Entertainment/JMComic',
+      config: {
+        pageTurnDirection4ImagesOnly: 'right2left'
+      }
+    }
+  },
+  exclude: ['node_modules', '.DS_Store', 'temp'],
+  config: {}
+}

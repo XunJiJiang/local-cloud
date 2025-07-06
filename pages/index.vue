@@ -1,5 +1,7 @@
 <script setup lang="ts">
-const { data, error } = await useFetch('/api/config')
+const pageConfig = await usePageConfig()
+
+const { data, error } = await useFetch('/api/dir-alias')
 
 if (error.value) {
   throw createError(error.value)
@@ -9,7 +11,7 @@ const aliasList = computed(() => {
   if (!data.value?.alias) return []
   return data.value.alias.map((item: string) => ({
     label: item,
-    to: `/tree/${item}`
+    to: `/${pageConfig.value.page.tree}/tree/${item}`
   }))
 })
 </script>

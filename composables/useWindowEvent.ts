@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { windowEvent, type Type } from '~/utils/windowEvent'
-import { onMounted, onUnmounted } from 'vue'
 
 export const useWindowEvent = <T extends Type>(
   type: T,

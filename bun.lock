@@ -19,6 +19,7 @@
         "better-sqlite3": "^11.10.0",
         "eslint": "^9.29.0",
         "ignore": "^7.0.5",
+        "json5": "^2.2.3",
         "music-metadata": "^11.3.0",
         "node-unrar-js": "^2.0.2",
         "nuxt": "^3.17.5",
