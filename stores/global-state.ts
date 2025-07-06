@@ -6,7 +6,7 @@ type PreviewState = {
 export const useGlobalState = defineStore('global-state', () => {
   const previewState = reactive<PreviewState>({
     isPreview: false,
-    previewType: null // image, video, audio
+    previewType: null
   })
 
   return {

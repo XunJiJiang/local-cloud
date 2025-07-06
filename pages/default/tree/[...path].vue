@@ -1,7 +1,4 @@
 <script setup lang="ts">
-import { useHeaderNav } from '~/stores/header-nav'
-import { useGlobalState } from '~/stores/global-state'
-
 definePageMeta({ layout: 'tree' })
 useHead({
   title: '文件树'
@@ -19,6 +16,8 @@ const paramPath = computed(() =>
 const globalState = useGlobalState()
 
 globalState.resetPreviewState()
+
+const pageConfig = await usePageConfig()
 
 const { data, error } = await useFetch('/api/list-folder-files', {
   method: 'POST',
@@ -42,7 +41,7 @@ const sortedItems = [
     .sort((a, b) => a.name.localeCompare(b.name))
     .map(({ name }) => ({
       label: name,
-      to: `/tree/${[...paramPath.value.map((item) => encodeURIComponent(item)), encodeURIComponent(name)].join('/')}`
+      to: `/${pageConfig.value.page.tree}/tree/${[...paramPath.value.map((item) => encodeURIComponent(item)), encodeURIComponent(name)].join('/')}`
     })),
   ...(data.value?.files ?? [])
     .sort((a, b) => a.name.localeCompare(b.name))
@@ -53,7 +52,7 @@ const sortedItems = [
 
       return {
         label: name,
-        to: `/preview/${[...paramPath.value.map((item) => encodeURIComponent(item)), encodeURIComponent(name)].join('/')}`
+        to: `/${pageConfig.value.page.preview}/preview/${[...paramPath.value.map((item) => encodeURIComponent(item)), encodeURIComponent(name)].join('/')}`
       }
     })
 ]
