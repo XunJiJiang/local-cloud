@@ -2,7 +2,7 @@
 import { readFileSync, statSync, existsSync } from 'fs'
 import { join } from 'path'
 import JSON5 from 'json5'
-import type { BaseConfig, Config, PartialConfig } from '~/types/config'
+import type { BaseConfig, Config, FullConfig, PartialConfig } from '~/types/config'
 import tryCatch from '~/utils/tryCatch'
 
 const CONFIG_PATH = join(process.cwd(), 'public/config.json5')
@@ -99,4 +99,17 @@ export const getConfig = (root?: string, fullPath?: string): Config => {
       : {}
 
   return deepMerge(defaultConfig, globalConfig, rootDirConfig, dirConfig)
+}
+
+export const getFullConfig = (): FullConfig => {
+  const config = JSON5.parse<FullConfig>(readFileSync(CONFIG_PATH, 'utf-8'))
+
+  if (!config.path || typeof config.path !== 'object') {
+    throw createError({
+      statusCode: 500,
+      statusMessage: 'Invalid config format'
+    })
+  }
+
+  return config
 }

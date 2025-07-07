@@ -1,6 +1,6 @@
-import type { BaseConfig } from '~/types/config'
+import type { Config } from '~/types/config'
 
-export default defineEventHandler<Promise<BaseConfig>>(async (event) => {
+export default defineEventHandler<Promise<Config>>(async (event) => {
   const body = await readBody<{
     root: string
     path: string[]

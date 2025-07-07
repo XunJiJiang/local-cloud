@@ -1,4 +1,3 @@
-import { supportedAudioTypes } from '../utils/extension'
 import { statSync } from 'fs'
 import * as mm from 'music-metadata'
 

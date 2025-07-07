@@ -1,8 +1,8 @@
-import type { BaseConfig } from '~/types/config'
+import type { Config } from '~/types/config'
 
 export const usePageConfig = async () => {
   const paramPath = useParamPath()
-  const { data, error } = await useFetch<BaseConfig>('/api/get-config', {
+  const { data, error } = await useFetch<Config>('/api/get-config', {
     method: 'POST',
     body: {
       root: paramPath.value[0] ?? '',

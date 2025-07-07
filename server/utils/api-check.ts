@@ -1,15 +1,11 @@
 import { join } from 'path'
-import { readFileSync } from 'fs'
 import ignore from 'ignore'
-import JSON5 from 'json5'
-import type { Config } from '~/types/config'
 import tryCatch from '~/utils/tryCatch'
-
-const CONFIG_PATH = join(process.cwd(), 'public/config.json5')
+import { getFullConfig } from './get-config'
 
 /** 检查当前路径是否合法, 并返回一些数据 */
 export const apiCheck = async (root: string, path: string[]) => {
-  const config = JSON5.parse<Config>(readFileSync(CONFIG_PATH, 'utf-8'))
+  const config = getFullConfig()
 
   if (!config.path || typeof config.path !== 'object') {
     throw createError({
