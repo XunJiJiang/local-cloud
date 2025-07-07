@@ -1,7 +1,7 @@
 <script setup lang="ts">
-const pageConfig = await usePageConfig()
+import type { DirAliasRes } from '~/server/api/dir-alias.get'
 
-const { data, error } = await useFetch('/api/dir-alias')
+const { data, error } = await useFetch<DirAliasRes>('/api/dir-alias')
 
 if (error.value) {
   throw createError(error.value)
@@ -9,9 +9,9 @@ if (error.value) {
 
 const aliasList = computed(() => {
   if (!data.value?.alias) return []
-  return data.value.alias.map((item: string) => ({
-    label: item,
-    to: `/${pageConfig.value.page.tree}/tree/${item}`
+  return data.value.alias.map(({ label, config }) => ({
+    label: label,
+    to: `/${config.page.tree}/tree/${label}`
   }))
 })
 </script>

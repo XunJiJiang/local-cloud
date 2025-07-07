@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 export type BaseConfig = {
   // 当文件预览页面只有图片时的翻页方向
   pageTurnDirection4ImagesOnly: 'left2right' | 'right2left'
@@ -9,7 +8,16 @@ export type BaseConfig = {
   }
 }
 
-export type Config = BaseConfig & Record<string, any>
+type JSONValue =
+  | string
+  | number
+  | boolean
+  | null
+  | undefined
+  | JSONValue[]
+  | Record<string, JSONValue>
+
+export type Config = BaseConfig & Record<string, JSONValue>
 
 export type PartialConfig = Partial<Config>
 

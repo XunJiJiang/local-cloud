@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { ListFolderFilesRes } from '~/server/api/list-folder-files.post'
+
 definePageMeta({ layout: 'preview' })
 useHead({
   title: '文件预览'
@@ -7,7 +9,7 @@ const paramPath = useParamPath()
 
 const pageConfig = await usePageConfig()
 
-const { data, error } = await useFetch('/api/list-folder-files', {
+const { data, error } = await useFetch<ListFolderFilesRes>('/api/list-folder-files', {
   method: 'POST',
   body: {
     root: paramPath.value[0] ?? '',
@@ -35,13 +37,13 @@ const thisFileIdx =
 
 const [prevTo, nextTo] = [
   thisFileIdx > 0
-    ? `/${pageConfig.value.page.preview}/preview/${paramPath.value
+    ? `/${pageConfig.page.preview}/preview/${paramPath.value
         .slice(0, -1)
         .map((item) => encodeURIComponent(item))
         .join('/')}/${encodeURIComponent(data.value?.files[thisFileIdx - 1].name ?? '')}`
     : null,
   thisFileIdx < (data.value?.files.length ?? 0) - 1
-    ? `/${pageConfig.value.page.preview}/preview/${paramPath.value
+    ? `/${pageConfig.page.preview}/preview/${paramPath.value
         .slice(0, -1)
         .map((item) => encodeURIComponent(item))
         .join('/')}/${encodeURIComponent(data.value?.files[thisFileIdx + 1].name ?? '')}`
@@ -49,7 +51,7 @@ const [prevTo, nextTo] = [
 ]
 
 const leftTo =
-  direction.value === 'left2right'
+  direction === 'left2right'
     ? thisFileIdx > 0
       ? prevTo
       : null
@@ -58,7 +60,7 @@ const leftTo =
       : null
 
 const rightTo =
-  direction.value === 'left2right'
+  direction === 'left2right'
     ? thisFileIdx < (data.value?.files.length ?? 0) - 1
       ? nextTo
       : null

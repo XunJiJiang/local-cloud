@@ -11,7 +11,8 @@
     JMComic: {
       path: '/Users/xunji/Documents/Entertainment/JMComic',
       config: {
-        pageTurnDirection4ImagesOnly: 'right2left'
+        pageTurnDirection4ImagesOnly: 'right2left',
+        'page.tree': 'default'
       }
     }
   },

@@ -5,7 +5,7 @@ const props = defineProps<{
 }>()
 const text = ref('')
 
-const { data, error } = await useFetch('/api/preview-text', {
+const { data, error } = await useFetch('/api/preview/text', {
   method: 'get',
   params: {
     root: props.root,

@@ -1,7 +1,21 @@
 import { readdirSync, statSync } from 'fs'
 import { join } from 'path'
+import type { Config } from '~/types/config'
 
-export default defineEventHandler(async (event) => {
+export type ListFolderFilesRes = {
+  files: {
+    name: string
+    type: string
+    fileType: 'image' | 'video' | 'audio' | 'text' | '[unknown]'
+  }[]
+  folders: {
+    name: string
+    type: string
+    config: Config
+  }[]
+}
+
+export default defineEventHandler<Promise<ListFolderFilesRes>>(async (event) => {
   const body = await readBody<{
     root: string
     path: string[]
@@ -28,10 +42,14 @@ export default defineEventHandler(async (event) => {
         }),
       folders: entries
         .filter((entry) => entry.type === 'directory')
-        .map((entry) => ({
-          name: entry.name,
-          type: 'directory'
-        }))
+        .map((entry) => {
+          const _config = getConfig(body.root)
+          return {
+            name: entry.name,
+            type: 'directory',
+            config: _config
+          }
+        })
     }
   }
 
@@ -63,9 +81,13 @@ export default defineEventHandler(async (event) => {
         fileType
       }
     }),
-    folders: folders.map((folder) => ({
-      name: folder,
-      type: 'directory'
-    }))
+    folders: folders.map((folder) => {
+      const _config = getConfig(body.root, join(fullPath, folder))
+      return {
+        name: folder,
+        type: 'directory',
+        config: _config
+      }
+    })
   }
 })

@@ -17,14 +17,26 @@ watch(route, () => {
   }
 })
 
-const pageConfig = await usePageConfig()
+const prevLink = ref('')
 
-const prevLink = computed(() => {
-  const prevPath = paramPath.value.slice(0, -1)
-  return prevPath.length > 0
-    ? `/${pageConfig.value.page.tree}/tree/${prevPath.map(encodeURIComponent).join('/')}`
-    : '/'
-})
+watch(
+  [paramPath],
+  async ([paramPath]) => {
+    if (paramPath.length === 0) {
+      prevLink.value = `/`
+      return
+    }
+    const prevPath = paramPath.slice(0, -1)
+    const _config = await getConfig(paramPath[0], paramPath.slice(1, -1))
+    prevLink.value =
+      prevPath.length > 0
+        ? `/${_config.page.tree}/tree/${prevPath.map(encodeURIComponent).join('/')}`
+        : '/'
+  },
+  {
+    immediate: true
+  }
+)
 </script>
 
 <template>

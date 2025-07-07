@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { ListFolderFilesRes } from '~/server/api/list-folder-files.post'
+
 const paramPath = useParamPath()
 
 const props = defineProps<{
@@ -23,7 +25,7 @@ const src = `/api/preview/images?root=${encodeURIComponent(props.root)}&path=${p
 
 const pageConfig = await usePageConfig()
 
-const { data, error } = await useFetch('/api/list-folder-files', {
+const { data, error } = await useFetch<ListFolderFilesRes>('/api/list-folder-files', {
   method: 'POST',
   body: {
     root: paramPath.value[0] ?? '',
@@ -47,13 +49,13 @@ const thisFileIdx =
 
 const [prevTo, nextTo] = [
   thisFileIdx > 0
-    ? `/${pageConfig.value.page.preview}/preview/${paramPath.value
+    ? `/${pageConfig.page.preview}/preview/${paramPath.value
         .slice(0, -1)
         .map((item) => encodeURIComponent(item))
         .join('/')}/${encodeURIComponent(data.value?.files[thisFileIdx - 1].name ?? '')}`
     : null,
   thisFileIdx < (data.value?.files.length ?? 0) - 1
-    ? `/${pageConfig.value.page.preview}/preview/${paramPath.value
+    ? `/${pageConfig.page.preview}/preview/${paramPath.value
         .slice(0, -1)
         .map((item) => encodeURIComponent(item))
         .join('/')}/${encodeURIComponent(data.value?.files[thisFileIdx + 1].name ?? '')}`

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { ListFolderFilesRes } from '~/server/api/list-folder-files.post'
+
 definePageMeta({ layout: 'tree' })
 useHead({
   title: '文件树'
@@ -19,7 +21,7 @@ globalState.resetPreviewState()
 
 const pageConfig = await usePageConfig()
 
-const { data, error } = await useFetch('/api/list-folder-files', {
+const { data, error } = await useFetch<ListFolderFilesRes>('/api/list-folder-files', {
   method: 'POST',
   body: {
     root: paramPath.value[0] ?? '',
@@ -39,9 +41,9 @@ const hasReadme = ref(false)
 const sortedItems = [
   ...(data.value?.folders ?? [])
     .sort((a, b) => a.name.localeCompare(b.name))
-    .map(({ name }) => ({
+    .map(({ name, config }) => ({
       label: name,
-      to: `/${pageConfig.value.page.tree}/tree/${[...paramPath.value.map((item) => encodeURIComponent(item)), encodeURIComponent(name)].join('/')}`
+      to: `/${config.page.tree}/tree/${[...paramPath.value.map((item) => encodeURIComponent(item)), encodeURIComponent(name)].join('/')}`
     })),
   ...(data.value?.files ?? [])
     .sort((a, b) => a.name.localeCompare(b.name))
@@ -52,7 +54,7 @@ const sortedItems = [
 
       return {
         label: name,
-        to: `/${pageConfig.value.page.preview}/preview/${[...paramPath.value.map((item) => encodeURIComponent(item)), encodeURIComponent(name)].join('/')}`
+        to: `/${pageConfig.page.preview}/preview/${[...paramPath.value.map((item) => encodeURIComponent(item)), encodeURIComponent(name)].join('/')}`
       }
     })
 ]
