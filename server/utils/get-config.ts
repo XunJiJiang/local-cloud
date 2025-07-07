@@ -74,28 +74,28 @@ export const getConfig = (root?: string, fullPath?: string): Config => {
   /** 目标目录配置 */
   const dirConfig =
     typeof fullPath === 'string' && fullPath !== ''
-      ? (tryCatch(() => {
-          const stat = statSync(fullPath)
-          const dir = stat.isDirectory() ? fullPath : join(fullPath, '..')
-          const configFiles = [
-            join(dir, '.local-cloud.config.json5'),
-            join(dir, '.local-cloud.config.json')
-          ]
+      ? parseFlatConfig(
+          tryCatch(() => {
+            const stat = statSync(fullPath)
+            const dir = stat.isDirectory() ? fullPath : join(fullPath, '..')
+            const configFiles = [
+              join(dir, '.local-cloud.config.json5'),
+              join(dir, '.local-cloud.config.json')
+            ]
 
-          for (const file of configFiles) {
-            if (existsSync(file)) {
-              const content = readFileSync(file, 'utf-8')
-              return parseFlatConfig(
-                file.endsWith('.json5')
+            for (const file of configFiles) {
+              if (existsSync(file)) {
+                const content = readFileSync(file, 'utf-8')
+                return file.endsWith('.json5')
                   ? JSON5.parse<PartialConfig>(content)
                   : ((content) => {
-                      const [parsed] = tryCatch(() => JSON.parse(content))
-                      return (parsed ?? {}) as PartialConfig
+                      const [parsed] = tryCatch((): PartialConfig => JSON.parse(content))
+                      return parsed ?? {}
                     })(content)
-              )
+              }
             }
-          }
-        })[0] ?? {})
+          })[0] ?? {}
+        )
       : {}
 
   return deepMerge(defaultConfig, globalConfig, rootDirConfig, dirConfig)
