@@ -65,7 +65,7 @@ function deepMerge<R = Record<string, unknown>>(
 export const getConfig = (root?: string, fullPath?: string): Config => {
   /** 默认配置 */
   const defaultConfig = JSON5.parse<BaseConfig>(readFileSync(DEFAULT_CONFIG_PATH, 'utf-8'))
-  const config = JSON5.parse<Config>(readFileSync(CONFIG_PATH, 'utf-8'))
+  const config = JSON5.parse<FullConfig>(readFileSync(CONFIG_PATH, 'utf-8'))
   /** 全局配置 */
   const globalConfig = parseFlatConfig(config.config || {})
   /** 根目录配置 */

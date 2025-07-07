@@ -1,7 +1,6 @@
 import { join } from 'path'
 import ignore from 'ignore'
 import tryCatch from '~/utils/tryCatch'
-import { getFullConfig } from './get-config'
 
 /** 检查当前路径是否合法, 并返回一些数据 */
 export const apiCheck = async (root: string, path: string[]) => {
@@ -20,7 +19,7 @@ export const apiCheck = async (root: string, path: string[]) => {
     }
 
     for (const key in config.path) {
-      if (key === root) {
+      if (key === decodeURI(root)) {
         return config.path[key].path
       }
     }
@@ -44,7 +43,7 @@ export const apiCheck = async (root: string, path: string[]) => {
 
   const ignorePatterns: string[] = config.exclude ?? []
   const ig = ignore().add(ignorePatterns)
-  const fullPath = join(rootPath, ...path)
+  const fullPath = join(rootPath, ...path.map(decodeURI))
   const relativePath = fullPath.replace(rootPath, '').slice(1)
   if (relativePath !== '' && ig.ignores(relativePath)) {
     throw createError({

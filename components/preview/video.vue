@@ -5,7 +5,7 @@ const props = defineProps<{
 }>()
 const src = computed(
   () =>
-    `/api/preview-video?root=${encodeURIComponent(props.root)}&path=${encodeURIComponent(props.path.join('/'))}`
+    `/api/preview/video?root=${encodeURIComponent(props.root)}&path=${encodeURIComponent(props.path.join('/'))}`
 )
 </script>
 <template>

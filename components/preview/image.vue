@@ -19,7 +19,7 @@ defineExpose({
   }
 })
 
-const src = `/api/preview-images?root=${encodeURIComponent(props.root)}&path=${props.path.map(encodeURIComponent).join('/')}`
+const src = `/api/preview/images?root=${encodeURIComponent(props.root)}&path=${props.path.map(encodeURIComponent).join('/')}`
 
 const pageConfig = await usePageConfig()
 
