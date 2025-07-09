@@ -18,6 +18,7 @@ export type Type =
   | 'cut'
   | 'wheel'
   | 'scroll'
+  | 'scrollend'
 
 export const windowEvent = <T extends Type>(
   type: T,
