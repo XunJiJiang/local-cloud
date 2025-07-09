@@ -37,6 +37,8 @@ if (error.value) {
   throw createError(error.value)
 }
 
+const direction = await usePreviewPageTurnDirection()
+
 const thisFileIdx =
   data.value?.files
     .sort((a, b) => a.name.localeCompare(b.name))
@@ -62,17 +64,35 @@ const [prevTo, nextTo] = [
     : null
 ]
 
+const leftTo =
+  direction === 'left2right'
+    ? thisFileIdx > 0
+      ? prevTo
+      : null
+    : thisFileIdx < (data.value?.files.length ?? 0) - 1
+      ? nextTo
+      : null
+
+const rightTo =
+  direction === 'left2right'
+    ? thisFileIdx < (data.value?.files.length ?? 0) - 1
+      ? nextTo
+      : null
+    : thisFileIdx > 0
+      ? prevTo
+      : null
+
 const clickHandler = (e: TouchEvent) => {
   console.log(e.touches.length)
   if (e.touches.length !== 1) return
 
   if (thisFileIdx > 0 && e.touches[0].clientX < window.innerWidth / 2) {
-    navigateTo(prevTo)
+    navigateTo(leftTo)
   } else if (
     thisFileIdx < (data.value?.files.length ?? 0) - 1 &&
     e.touches[0].clientX >= window.innerWidth / 2
   ) {
-    navigateTo(nextTo)
+    navigateTo(rightTo)
   }
 }
 </script>
