@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import type { ListFolderFilesRes } from '~/server/api/list-folder-files.post'
 
-definePageMeta({ layout: 'preview' })
-useHead({
-  title: '文件预览'
-})
+definePageMeta({ layout: 'preview', scrollToTop: false })
+useHead({ title: '文件预览' })
+
 const paramPath = useParamPath()
 
 const pageConfig = await usePageConfig()

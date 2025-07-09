@@ -9,7 +9,7 @@ export const useScrollHistory = () => {
     }
     if (!o) {
       const def = Array.from<[number, number]>({ length: paramPath.value.length + 1 }).fill([0, 0])
-      def[paramPath.value.length] = currentScroll.value
+      def[paramPath.value.length] = [currentScroll.value[0], currentScroll.value[1]]
       return def
     }
     const prevDepth = o.length
@@ -22,9 +22,6 @@ export const useScrollHistory = () => {
         ...Array.from<[number, number]>({ length: currentDepth - prevDepth }).fill([0, 0])
       ]
     } else if (prevDepth > currentDepth) {
-      nextTick(() => {
-        currentScroll.value = o[currentDepth - 1]
-      })
       return o.slice(0, currentDepth)
     } else {
       return [...o.slice(0, -1), [currentScroll.value[0], currentScroll.value[1]]]
@@ -57,7 +54,33 @@ export const useScrollHistory = () => {
     }
   })
 
-  useWindowEvent('scroll', () => {
+  watch(paramPath, (v, o) => {
+    const prevDepth = o.length + 1
+    const currentDepth = v.length + 1
+    nextTick(() => {
+      if (prevDepth < currentDepth) {
+        window.scrollTo({ top: 0, left: 0 })
+      } else if (prevDepth > currentDepth) {
+        const scrollHistory = scrollHistories.value[currentDepth - 1]
+        if (scrollHistory)
+          window.scrollTo({
+            top: scrollHistory[0],
+            left: scrollHistory[1]
+          })
+      }
+    })
+  })
+
+  const scrollEventType = useState<'scrollend' | 'scroll'>('scroll-event-type', () => {
+    if (window) return 'onscrollend' in window ? 'scrollend' : 'scroll'
+    return 'scroll'
+  })
+
+  onMounted(() => {
+    scrollEventType.value = 'onscrollend' in window ? 'scrollend' : 'scroll'
+  })
+
+  useWindowEvent(scrollEventType, () => {
     const currentScrollY = window.scrollY
     const currentScrollX = window.scrollX
 
