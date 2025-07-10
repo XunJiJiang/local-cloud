@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { ListFolderFilesRes } from '~/server/api/list-folder-files.post'
 
-definePageMeta({ layout: 'tree' })
+definePageMeta({ layout: 'tree', scrollToTop: false })
 useHead({
   title: '文件树'
 })

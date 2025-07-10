@@ -45,9 +45,8 @@ export const useScrollHistory = () => {
           if (
             window.scrollY !== o[currentDepth - 1][0] ||
             window.scrollX !== o[currentDepth - 1][1]
-          ) {
+          )
             trySetScroll()
-          }
         }, 10)
       }
       trySetScroll()
